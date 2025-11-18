@@ -7,7 +7,7 @@ if(n==1){
 }
 towerOfHanoi(n-1,fromtower,auxtower,totower);
 printf("\nmove disc %d from tower %c to tower %c",n,fromtower,totower);
-towerOfHanoi(n-1,auxtower,fromtower,totower);
+towerOfHanoi(n-1,auxtower,totower,fromtower);
 }
 int main(){
     int n;
@@ -16,3 +16,4 @@ int main(){
     printf("\nthe steps to be performed\n");
     towerOfHanoi(n,'a','b','c');
 }
+
