@@ -1,53 +1,109 @@
+//a
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#define FIFO_NAME "myfifo"
-int main()
-{
-int fd;
-char buffer[BUFSIZ];
-// Create the FIFO (named pipe) if it doesn't already exist
-if (mkfifo(FIFO_NAME, 0666) == -1) {
-perror("mkfifo");
-exit(EXIT_FAILURE);
+void read_adjacency_matrix(int a[10][10], int n) 
+{ 
+ int  i, j; 
+ 
+ for (i = 0; i < n; i++) 
+ { 
+  for (j = 0; j < n; j++) 
+  { 
+   scanf("%d", &a[i][j]); 
+  }  
+ } 
 }
-// Writer process
-if (fork() == 0)
-{
-printf("Writer process is running. Enter data to write (type 'exit' to quit):\n");
-fd = open(FIFO_NAME, O_WRONLY);
-if (fd == -1) {
-    perror("open");
-exit(EXIT_FAILURE);
+
+void bfs(int a[10][10], int n, int u) 
+{ 
+ int  f, r, q[10], v; 
+int s[10] = {0};   
+ 
+ printf("The nodes visited from %d : ", u); 
+ f = 0, r = -1;   
+ q[++r] = u;   
+ 
+ s[u] = 1;  
+ printf("%d\t", u); 
+ 
+ while ( f <= r ) 
+ { 
+  u = q[f++];    
+  for (v = 0; v < n; v++) 
+  { 
+   if (a[u][v] == 1)  
+   { 
+    if (s[v] == 0)   
+    { 
+     printf("%d\t", v);   
+     s[v] = 1;       
+     q[++r] = v;       
+    } 
+   } 
+  } 
+ } 
+ printf("\n"); 
+} 
+void main() 
+{ 
+ int  n, a[10][10], source, i, j; 
+ 
+ printf("Enter the number of nodes :"); 
+ scanf("%d", &n); 
+ 
+ printf("Enter the adjacency matrix:\n"); 
+ for (i = 0; i < n; i++) 
+ { 
+  for (j = 0; j < n; j++) scanf("%d", &a[i][j]); 
+ } 
+ 
+ for (source = 0; source < n; source++) 
+  bfs(a, n, source); 
 }
-while (1) {
-fgets(buffer, BUFSIZ, stdin);
-if (strcmp(buffer, "exit\n") == 0) {
-break;
+
+
+//b
+#include <stdio.h>
+int a[10][10], s[10], n;  // Global variables 
+void read_adjacency_matrix(int a[10][10], int n) 
+{ 
+ int  i, j; 
+ 
+ for (i = 0; i < n; i++) 
+ { 
+  for (j = 0; j < n; j++) 
+  { 
+   scanf("%d", &a[i][j]); 
+  }  
+ } 
 }
-write(fd, buffer, strlen(buffer) + 1);
-}
-close(fd);
-}
-// Reader process
-else {
-printf("Reader process is running. Reading data from the FIFO:\n");
-fd = open(FIFO_NAME, O_RDONLY);
-if (fd == -1) {
-perror("open");
-exit(EXIT_FAILURE);
-}
-while (1) {
-if (read(fd, buffer, BUFSIZ) == 0) {
-break;
-}
-printf("Received: %s", buffer);
-}
-close(fd); 
-}
-return 0;
+
+void dfs(int u) 
+{ 
+ int v; 
+  
+ s[u] = 1; 
+  
+ printf("%d ", u); 
+ 
+ for (v = 0; v < n; v++) 
+ { 
+  if (a[u][v] == 1 && s[v] == 0) dfs(v); 
+ } 
+} 
+void main() 
+{ 
+ int i, source; 
+  
+ printf("Enter the number of nodes in the graph : "); 
+ scanf("%d", &n); 
+ printf("Enter the adjacency matrix:\n"); 
+ read_adjacency_matrix(a, n); 
+ 
+ for (source = 0; source < n; source++) 
+ { 
+  for (i = 0; i < n; i++) s[i] = 0; 
+   
+  printf("\nThe nodes reachable from %d: ", source); 
+  dfs(source); 
+ } 
 }
