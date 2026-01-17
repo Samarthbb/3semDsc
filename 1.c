@@ -11,6 +11,7 @@ void push()
         printf("\nEnter element to insert:");
         scanf("%d",&s[++top]);
 }
+ }
 
 void pop()
 {
@@ -30,6 +31,7 @@ void disp()
         printf("\nStack elements are:\n");
     while(t>=0)
         printf("%d ",s[t--]);
+}
 }
 int main()
 {
@@ -56,4 +58,5 @@ int main()
     return 0;
 
 }
+
 
